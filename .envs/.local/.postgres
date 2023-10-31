@@ -1,0 +1,6 @@
+# PostgreSQL
+POSTGRES_HOST=monorail.proxy.rlwy.net
+POSTGRES_PORT=29663
+POSTGRES_DB=railway
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=-F1e2dbbAfCCdbCbeD422ca4*5ec6fE5
