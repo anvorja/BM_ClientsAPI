@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Consumir datos JSON</title>
+</head>
+<body>
+    <h1>Listado de Datos</h1>
+    <ul id="data-list">
+        <!-- Aquí se mostrarán los datos -->
+    </ul>
+
+    <script>
+        // Función para consumir datos JSON desde la URL
+        function obtenerDatos() {
+            // URL de la API que proporciona los datos JSON
+            const url = 'http://127.0.0.1:7676/listado/';
+
+            // Realizar una solicitud HTTP GET
+            fetch(url)
+                .then(response => response.json()) // Convertir la respuesta a JSON
+                .then(data => {
+                    // Manipular los datos recibidos
+                    const dataList = document.getElementById('data-list');
+
+                    data.forEach(item => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `ID: ${item.id}, Nombre: ${item.nombre}, NIT: ${item.nit}`;
+                        dataList.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al obtener los datos:', error);
+                });
+        }
+
+        // Llamar a la función para obtener los datos al cargar la página
+        obtenerDatos();
+    </script>
+</body>
+</html>
+
