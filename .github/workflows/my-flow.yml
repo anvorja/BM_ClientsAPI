@@ -6,8 +6,8 @@ on:
       - "main"
 
 env:
-  REGISTRY: zethoc
-  IMAGE_NAME: bm_quotes_api
+  REGISTRY: anborja
+  IMAGE_NAME: bm_clients_api
 
 jobs:
   test:
