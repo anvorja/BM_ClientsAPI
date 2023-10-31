@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h2 class="text-center mb-4">Nuestros Clientes Prioritarios</h2>
+
+    <ul class="list-group">
+      {% for client in clients %}
+        <li class="list-group-item">
+          <a href="{% url 'client_detail' client.id %}" class="text-decoration-none">
+            <div class="d-flex justify-content-between align-items-center">
+              {% if client.prioritario %}
+                <span class="font-weight-bold">{{ client.nombre }}</span>
+              {% else %}
+                <span>{{ client.id }} - {{ client.nombre }}</span>
+              {% endif %}
+              <p class="mb-0">{{ client.descripcion }}</p>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

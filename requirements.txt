@@ -1,0 +1,14 @@
+asgiref
+autopep8
+Django
+pycodestyle
+sqlparse
+toml
+psycopg2-binary
+djangorestframework
+pip
+pytz
+setuptools
+autopep8
+django-cors-headers
+coreapi
