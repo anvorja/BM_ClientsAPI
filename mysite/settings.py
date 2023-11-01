@@ -7,6 +7,9 @@ SECRET_KEY = 'django-insecure-+ty)45iaz098$$-h48(hpybenpf(gliu!!u+8y_1=-c9&p0z3*
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "localhost",
+    "0.0.0.0",
+    "127.0.0.1",
     "bemanager-clients:8989",
     "bemanager-clients"
 ]
