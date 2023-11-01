@@ -5,7 +5,6 @@ django-extensions>=3.2.1
 django-cors-headers==3.13.0
 Pillow==9.4.0
 
-
 asgiref
 autopep8
 pycodestyle
@@ -17,7 +16,6 @@ pytz
 setuptools
 autopep8
 coreapi
-
 
 #Djanfo filter
 django-filter==21.1

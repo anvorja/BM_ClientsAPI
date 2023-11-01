@@ -112,9 +112,9 @@ class ClienteViewSet(viewsets.ModelViewSet):
     serializer_class = ClienteSerializer
 
 
-class ClientList(generics.ListCreateAPIView):
-    queryset = Client.objects.all()
-    serializer_class = ClienteSerializer
+# class ClientList(generics.ListCreateAPIView):
+#     queryset = Client.objects.all()
+#     serializer_class = ClienteSerializer
 
 
 def get_clients_as_json(request):

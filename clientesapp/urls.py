@@ -1,9 +1,13 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-# from clientesapp import views
+from clientesapp import views
+from rest_framework import routers
 from . import views
-from .views import ClientList
+# from .views import ClientList
+
+router = routers.DefaultRouter()
+router.register(r'clientes', views.ClienteViewSet, 'clientes')
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -15,6 +19,7 @@ urlpatterns = [
     path('clients/<int:client_id>', views.client_detail, name='client_detail'),
     path('clients/<int:client_id>/delete', views.delete_client, name='delete_client'),
     path('priority_client/', views.prioritary_clients, name='prioritario_clients'),
-    path('api/clients/', ClientList.as_view(), name='client-list'),
-    path('listado/', views.get_clients_as_json)
+    path('listado/', views.get_clients_as_json),
+    # path('api/clients/', ClientList.as_view(), name='client-list'),
+    path('api/', include(router.urls)),
 ]
