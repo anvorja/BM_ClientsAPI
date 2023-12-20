@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
@@ -10,6 +10,10 @@ from .forms import ClientForm
 from .serializers import ClienteSerializer
 from rest_framework.decorators import api_view, action
 from rest_framework import generics, viewsets, status
+from prometheus_client import Counter
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+
+create_client_counter = Counter('django_create_client_total', 'Total number of create_client operations')
 
 
 def signup(request):
@@ -46,6 +50,9 @@ def create_client(request):
             new_client = form.save(commit=False)
             new_client.user = request.user
             new_client.save()
+
+            create_client_counter.inc()
+
             return redirect('clients')
         except ValueError:
             return render(request, 'create_client.html', {"form": ClientForm, "error": "Error al crear cliente."})
@@ -121,3 +128,9 @@ def get_clients_as_json(request):
     clients = Client.objects.all()
     serializer = ClienteSerializer(clients, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+
+
+
+def metrics(request):
+    return HttpResponse(generate_latest(), content_type=CONTENT_TYPE_LATEST)

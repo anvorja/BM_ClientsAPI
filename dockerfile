@@ -9,6 +9,8 @@ COPY . /app
 
 # Instala las dependencias de tu proyecto (si tienes un archivo requirements.txt)
 RUN pip install -r requirements.txt
+RUN pip install prometheus_client django-prometheus
+RUN pip install django-loki
 
 # Ejecuta las migraciones de Django
 RUN python manage.py makemigrations

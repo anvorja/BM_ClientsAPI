@@ -2,7 +2,40 @@ version: '3'
 
 services:
   web:
-    image: clientes-app-bm
+    image: clientes
     ports:
       - "8989:8989"  
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom_data:/prometheus
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=bm_admin
+      - GF_SECURITY_ADMIN_PASSWORD=bm_grafana
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+
+  # prometheus_login:
+  #   image: danielcaicedo8991/prometheus-login:v1.0
+  #   ports:
+  #     - 3030:3030
+
+volumes:
+  prom_data:

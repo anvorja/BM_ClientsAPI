@@ -1,4 +1,5 @@
 from pathlib import Path
+from corsheaders import middleware
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -11,7 +12,8 @@ ALLOWED_HOSTS = [
     "0.0.0.0",
     "127.0.0.1",
     "bemanager-clients:8989",
-    "bemanager-clients"
+    "bemanager-clients",
+    "*"
 ]
 
 # Application definition
@@ -29,6 +31,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
@@ -37,6 +40,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware'
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -69,6 +73,7 @@ DATABASES = {
         'PORT': '29663',
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
