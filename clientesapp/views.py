@@ -10,6 +10,14 @@ from .forms import ClientForm
 from .serializers import ClienteSerializer
 from rest_framework.decorators import api_view, action
 from rest_framework import generics, viewsets, status
+from prometheus_client import Gauge, Histogram
+from django.http import JsonResponse
+from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST, REGISTRY
+from django.http import HttpResponse
+import logging
+
+logger = logging.getLogger(__name__)
+provider_trafic = Counter('clients_traffic', 'Number of request received in the Clients API', ['method', 'endpoint'])
 
 
 def signup(request):
@@ -49,6 +57,20 @@ def create_client(request):
             return redirect('clients')
         except ValueError:
             return render(request, 'create_client.html', {"form": ClientForm, "error": "Error al crear cliente."})
+
+
+@login_required
+def delete_client(request, client_id):
+    client = get_object_or_404(Client, pk=client_id, user=request.user)
+    if request.method == 'POST':
+        client.delete()
+        return redirect('clients')
+
+
+@login_required
+def prioritary_clients(request):
+    clientePrioritario = Client.objects.filter(user=request.user, prioritario=True)
+    return render(request, 'clients_prioritary.html', {"clients": clientePrioritario})
 
 
 def home(request):
@@ -93,23 +115,14 @@ def client_detail(request, client_id):
                           {'client': client, 'form': form, 'error': 'Error actualizando cliente.'})
 
 
-@login_required
-def delete_client(request, client_id):
-    client = get_object_or_404(Client, pk=client_id, user=request.user)
-    if request.method == 'POST':
-        client.delete()
-        return redirect('clients')
-
-
-@login_required
-def prioritary_clients(request):
-    clientePrioritario = Client.objects.filter(user=request.user, prioritario=True)
-    return render(request, 'clients_prioritary.html', {"clients": clientePrioritario})
-
-
 class ClienteViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClienteSerializer
+
+    def list(self, request, *args, **kwargs):
+        provider_trafic.labels(method='GET', endpoint='/clients/').inc()
+        logger.info('Listing providers')  # Log message
+        return super().list(request, *args, **kwargs)
 
 
 # class ClientList(generics.ListCreateAPIView):
@@ -121,3 +134,7 @@ def get_clients_as_json(request):
     clients = Client.objects.all()
     serializer = ClienteSerializer(clients, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+
+def metrics(request):
+    return HttpResponse(generate_latest(REGISTRY), content_type=CONTENT_TYPE_LATEST)
