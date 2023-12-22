@@ -2,7 +2,12 @@ version: '3'
 
 services:
   web:
-    image: clientes
+    image: clientes-app-bm
+    build:
+      context: .
+      dockerfile: dockerfile
+    volumes:
+      - .:/app
     ports:
       - "8989:8989"  
 

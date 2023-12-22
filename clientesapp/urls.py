@@ -5,6 +5,8 @@ from clientesapp import views
 from rest_framework import routers
 from . import views
 # from .views import ClientList
+from django.http import HttpResponse
+from prometheus_client.exposition import generate_latest
 
 router = routers.DefaultRouter()
 router.register(r'clientes', views.ClienteViewSet, 'clientes')
@@ -22,4 +24,5 @@ urlpatterns = [
     path('listado/', views.get_clients_as_json),
     # path('api/clients/', ClientList.as_view(), name='client-list'),
     path('api/', include(router.urls)),
+    path('metricsclient/', lambda r: HttpResponse(generate_latest(), content_type='text/plain')),
 ]
