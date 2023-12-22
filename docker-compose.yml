@@ -37,10 +37,5 @@ services:
     depends_on:
       - prometheus
 
-  # prometheus_login:
-  #   image: danielcaicedo8991/prometheus-login:v1.0
-  #   ports:
-  #     - 3030:3030
-
 volumes:
   prom_data:
